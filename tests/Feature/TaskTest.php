@@ -12,10 +12,11 @@ class TaskTest extends TestCase
     public function test_fetch_all_tasks_of_a_todo_list()
     {
         // preperation
+        $list = $this->createTodoList();
         $task = $this->createTask();
 
         // action
-        $response = $this->getJson(route('task.index'))->assertOk()->json();
+        $response = $this->getJson(route('todo-list.task.index', $list->id))->assertOk()->json();
 
         // assertion
         $this->assertEquals(1, count($response));
@@ -24,8 +25,9 @@ class TaskTest extends TestCase
 
     public function test_store_a_task_for_a_todo_list()
     {
+        $list = $this->createTodoList();
         $task = $this->createTask();
-        $this->postJson(route('task.store'), ['title' => $task->title])
+        $this->postJson(route('todo-list.task.store', $list->id), ['title' => $task->title])
             ->assertCreated();
         $this->assertDatabaseHas('tasks', ['title' => $task->title]);
     }
@@ -35,5 +37,13 @@ class TaskTest extends TestCase
         $task = $this->createTask();
         $this->deleteJson(route('task.destroy', $task->id))->assertNoContent();
         $this->assertDatabaseMissing('tasks', ['title' => $task->title]);
+    }
+
+    public function test_update_a_task_of_a_todo_list()
+    {
+        $task = $this->createTask();
+        $this->patchJson(route('task.update', $task->id), ['title' => 'updated title'])
+            ->assertOk();
+        $this->assertDatabaseHas('tasks', ['title' => 'updated title']);
     }
 }
