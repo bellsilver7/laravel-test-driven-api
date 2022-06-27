@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TodoListRequest;
 use App\Models\TodoList;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TodoListController extends Controller
@@ -28,7 +27,6 @@ class TodoListController extends Controller
     public function destroy(TodoList $todo_list)
     {
         $todo_list->delete();
-        // return response('', 204);
         return response('', Response::HTTP_NO_CONTENT);
     }
 
