@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -13,7 +12,7 @@ class LoginTest extends TestCase
 
     public function test_a_user_can_login_with_email_and_password()
     {
-        $user = User::factory()->create();
+        $user = $this->createUser();
         $response = $this->postJson(route('user.login'), [
             'email' => $user->email,
             'password' => 'password',
@@ -34,7 +33,7 @@ class LoginTest extends TestCase
 
     public function test_it_raise_error_if_password_is_incorrect()
     {
-        $user = User::factory()->create();
+        $user = $this->createUser();
         $this->postJson(route('user.login'), [
             'email' => $user->email,
             'password' => 'random',
