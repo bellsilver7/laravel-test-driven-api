@@ -10,15 +10,7 @@ class TodoList extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
-
-    // public static function boot()
-    // {
-    //     parent::boot();
-    //     self::deleting(function ($todo_list) {
-    //         $todo_list->tasks->each->delete();
-    //     });
-    // }
+    protected $fillable = ['name', 'user_id'];
 
     public function tasks(): HasMany
     {
