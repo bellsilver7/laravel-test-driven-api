@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -35,10 +36,35 @@ class TaskTest extends TestCase
     public function test_store_a_task_for_a_todo_list()
     {
         $list = $this->createTodoList();
-        $task = $this->createTask();
-        $this->postJson(route('todo-list.task.store', $list->id), ['title' => $task->title])
+        $task = Task::factory()->make();
+        $label = $this->createLabel();
+        $this->postJson(route('todo-list.task.store', $list->id), [
+            'title' => $task->title,
+            'label_id' => $label->id,
+        ])
             ->assertCreated();
-        $this->assertDatabaseHas('tasks', ['title' => $task->title, 'todo_list_id' => $list->id]);
+        $this->assertDatabaseHas('tasks', [
+            'title' => $task->title,
+            'todo_list_id' => $list->id,
+            'label_id' => $label->id,
+        ]);
+    }
+
+    public function test_store_a_task_for_a_todo_list_without_a_label()
+    {
+        $list = $this->createTodoList();
+        $task = Task::factory()->make();
+
+        $this->postJson(route('todo-list.task.store', $list->id), [
+            'title' => $task->title,
+        ])
+            ->assertCreated();
+
+        $this->assertDatabaseHas('tasks', [
+            'title' => $task->title,
+            'todo_list_id' => $list->id,
+            'label_id' => null,
+        ]);
     }
 
     public function test_delete_a_task_from_database()
