@@ -32,9 +32,9 @@ class WebServiceController extends Controller
 
     public function callback(Request $request)
     {
-        $config = config('services.google');
+        $client = app(Client::class);
 
-        $client = new Client();
+        $config = config('services.google');
         $client->setClientId($config['id']);
         $client->setClientSecret($config['secret']);
         $client->setRedirectUri($config['redirect_uri']);
