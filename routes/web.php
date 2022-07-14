@@ -31,13 +31,14 @@ Route::get('/drive', function () {
 });
 
 Route::get('/google-drive/callback', function () {
-    $client = new Google\Client();
-    $client->setClientId(env('GOOGLE_CLIENT_ID'));
-    $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-    $client->setRedirectUri('http://localhost:8000/google-drive/callback');
-    $code = request('code');
-    $access_token = $client->fetchAccessTokenWithAuthCode($code);
-    return $access_token;
+    return request('code');
+    // $client = new Google\Client();
+    // $client->setClientId(env('GOOGLE_CLIENT_ID'));
+    // $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+    // $client->setRedirectUri('http://localhost:8000/google-drive/callback');
+    // $code = request('code');
+    // $access_token = $client->fetchAccessTokenWithAuthCode($code);
+    // return $access_token;
 });
 
 Route::get('/upload', function () {
