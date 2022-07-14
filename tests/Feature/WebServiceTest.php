@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\WebService;
 use Google\Client;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -37,17 +36,15 @@ class WebServiceTest extends TestCase
     {
         $this->mock(Client::class, function (MockInterface $mock) {
             $mock->shouldReceive('fetchAccessTokenWithAuthCode')
-                ->andReturn('fake-token');
+                ->andReturn(['access_token' => 'fake-token']);
         });
 
         $response = $this->postJson(route('web-service.callback'), ['code' => 'dummyCode'])
             ->assertCreated();
 
-        // dd($response);
-
         $this->assertDatabaseHas('web_services', [
             'user_id' => $this->user->id,
-            'token' => '"{\"access_token\":\"fake-token\"}"'
+            'token' => json_encode(['access_token' => 'fake-token'])
         ]);
     }
 
