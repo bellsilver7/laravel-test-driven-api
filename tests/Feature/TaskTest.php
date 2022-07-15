@@ -21,7 +21,8 @@ class TaskTest extends TestCase
         // preperation
         $list = $this->createTodoList();
         $list2 = $this->createTodoList();
-        $task = $this->createTask(['todo_list_id' => $list->id]);
+        $label = $this->createLabel(['user_id' => auth()->id()]);
+        $task = $this->createTask(['todo_list_id' => $list->id, 'label_id' => $label->id]);
         $this->createTask(['todo_list_id' => $list2->id]);
 
         // action

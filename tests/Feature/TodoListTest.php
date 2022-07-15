@@ -25,7 +25,8 @@ class TodoListTest extends TestCase
     public function test_fetch_all_todo_list()
     {
         $this->createTodoList();
-        $response = $this->getJson(route('todo-list.index'))->json();
+        $response = $this->getJson(route('todo-list.index'))->json('data');
+
         $this->assertEquals(1, count($response));
         $this->assertEquals('my list', $response[0]['name']);
     }
@@ -34,7 +35,7 @@ class TodoListTest extends TestCase
     {
         $response = $this->getJson(route('todo-list.show', $this->list->id))
             ->assertOk()
-            ->json();
+            ->json('data');
         $this->assertEquals($response['name'], $this->list->name);
     }
 
@@ -48,7 +49,7 @@ class TodoListTest extends TestCase
             // ->assertStatus(201);
             // ->assertSuccessful();
             ->assertCreated()
-            ->json();
+            ->json('data');
 
         // assertion
         $this->assertEquals($list->name, $response['name']);
